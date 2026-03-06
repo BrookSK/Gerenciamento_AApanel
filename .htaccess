@@ -1,0 +1,13 @@
+RewriteEngine On
+
+# Serve files from /public when project root is the web root
+RewriteCond %{REQUEST_URI} !^/public/
+
+RewriteCond %{DOCUMENT_ROOT}/public%{REQUEST_URI} -f [OR]
+RewriteCond %{DOCUMENT_ROOT}/public%{REQUEST_URI} -d
+RewriteRule ^(.*)$ public/$1 [L]
+
+# Fallback to the front controller
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ index.php [QSA,L]

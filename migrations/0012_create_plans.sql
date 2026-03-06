@@ -1,0 +1,14 @@
+CREATE TABLE IF NOT EXISTS plans (
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    name VARCHAR(190) NOT NULL,
+    description VARCHAR(255) NULL,
+    price DECIMAL(10,2) NOT NULL DEFAULT 0.00,
+    billing_cycle VARCHAR(30) NOT NULL DEFAULT 'monthly',
+    emails_max INT UNSIGNED NOT NULL DEFAULT 0,
+    wordpress_sites_max INT UNSIGNED NOT NULL DEFAULT 0,
+    status VARCHAR(30) NOT NULL DEFAULT 'active',
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NULL DEFAULT NULL,
+    PRIMARY KEY (id),
+    KEY idx_plans_status (status)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

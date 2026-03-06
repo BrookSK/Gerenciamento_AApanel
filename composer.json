@@ -1,0 +1,13 @@
+{
+  "name": "brooks/gerenciamento-aapanel",
+  "description": "Gerenciamento de assinaturas e hospedagens (AAPanel + ASAAS)",
+  "type": "project",
+  "require": {
+    "php": "^8.2"
+  },
+  "autoload": {
+    "psr-4": {
+      "App\\": "app/"
+    }
+  }
+}
