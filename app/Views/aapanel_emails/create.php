@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Criar e-mail (aaPanel)</title>
+</head>
+<body>
+    <h1>Criar e-mail (aaPanel)</h1>
+
+    <div>
+        <a href="/aapanel-emails">Voltar</a>
+    </div>
+
+    <?php if (!empty($error)) : ?>
+        <div style="color: #b00020;">
+            <?php echo htmlspecialchars((string)$error, ENT_QUOTES, 'UTF-8'); ?>
+        </div>
+    <?php endif; ?>
+
+    <form method="post" action="/aapanel-emails/store">
+        <div>
+            <label>E-mail completo</label>
+            <input type="text" name="email" required placeholder="contato@seudominio.com.br">
+        </div>
+        <div>
+            <label>Senha</label>
+            <input type="password" name="password" required>
+        </div>
+        <button type="submit">Criar</button>
+    </form>
+</body>
+</html>

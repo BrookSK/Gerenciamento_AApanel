@@ -83,6 +83,19 @@ final class App
         $router->post('/aapanel-servers/update', ['App\\Controllers\\AapanelServersController', 'update']);
         $router->post('/aapanel-servers/delete', ['App\\Controllers\\AapanelServersController', 'delete']);
 
+        $router->get('/aapanel-sites', ['App\\Controllers\\AapanelSitesController', 'index']);
+        $router->get('/aapanel-sites/create', ['App\\Controllers\\AapanelSitesController', 'create']);
+        $router->post('/aapanel-sites/store', ['App\\Controllers\\AapanelSitesController', 'store']);
+        $router->post('/aapanel-sites/start', ['App\\Controllers\\AapanelSitesController', 'start']);
+        $router->post('/aapanel-sites/stop', ['App\\Controllers\\AapanelSitesController', 'stop']);
+        $router->post('/aapanel-sites/delete', ['App\\Controllers\\AapanelSitesController', 'delete']);
+
+        $router->get('/aapanel-emails', ['App\\Controllers\\AapanelEmailsController', 'index']);
+        $router->get('/aapanel-emails/create', ['App\\Controllers\\AapanelEmailsController', 'create']);
+        $router->post('/aapanel-emails/store', ['App\\Controllers\\AapanelEmailsController', 'store']);
+        $router->post('/aapanel-emails/delete', ['App\\Controllers\\AapanelEmailsController', 'delete']);
+        $router->post('/aapanel-emails/password', ['App\\Controllers\\AapanelEmailsController', 'changePassword']);
+
         $router->get('/settings', ['App\\Controllers\\SettingsController', 'index']);
         $router->post('/settings/save', ['App\\Controllers\\SettingsController', 'save']);
 

@@ -55,7 +55,7 @@ final class View
                 if ($area === 'portal') {
                     $nav = '<a href="/portal">Início</a><a href="/portal/emails">Meus e-mails</a><a href="/portal/plans">Planos</a><a href="/portal/tickets">Chamados</a>';
                 } else {
-                    $nav = '<a href="/">Início</a><a href="/clients">Clientes</a><a href="/subscriptions">Assinaturas</a><a href="/plans">Planos</a><a href="/tickets">Chamados</a><a href="/aapanel-servers">Servidores</a><a href="/integration-logs">Logs</a><a href="/settings">Configurações</a>';
+                    $nav = '<a href="/">Início</a><a href="/clients">Clientes</a><a href="/subscriptions">Assinaturas</a><a href="/plans">Planos</a><a href="/tickets">Chamados</a><a href="/aapanel-servers">Servidores</a><a href="/aapanel-sites">Sites</a><a href="/aapanel-emails">E-mails</a><a href="/integration-logs">Logs</a><a href="/settings">Configurações</a>';
                 }
 
                 $topbar = $isLogin ? '' : (
