@@ -29,7 +29,23 @@ final class IntegrationLogsController extends Controller
         $page = (int)($_GET['page'] ?? 1);
         $perPage = (int)($_GET['per_page'] ?? 50);
 
-        $data = IntegrationLog::paginate($page, $perPage);
+        try {
+            $data = IntegrationLog::paginate($page, $perPage);
+        } catch (\Throwable $e) {
+            $data = [];
+        }
+
+        if (!is_array($data)) {
+            $data = [];
+        }
+
+        if (!isset($data['items']) || !is_array($data['items'])) {
+            $data['items'] = [];
+        }
+
+        if (!isset($data['total'])) {
+            $data['total'] = 0;
+        }
 
         return $this->view('integration_logs/index', [
             'data' => $data,

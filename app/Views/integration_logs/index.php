@@ -9,7 +9,7 @@
     <h1>Logs de Integração</h1>
 
     <div>
-        Total: <?php echo (int)$data['total']; ?>
+        Total: <?php echo (int)($data['total'] ?? 0); ?>
     </div>
 
     <table border="1" cellpadding="6" cellspacing="0">
@@ -27,7 +27,7 @@
             </tr>
         </thead>
         <tbody>
-            <?php foreach ($data['items'] as $row) : ?>
+            <?php foreach (($data['items'] ?? []) as $row) : ?>
                 <tr>
                     <td><?php echo (int)$row['id']; ?></td>
                     <td><?php echo htmlspecialchars((string)$row['created_at'], ENT_QUOTES, 'UTF-8'); ?></td>

@@ -21,7 +21,7 @@
             </tr>
         </thead>
         <tbody>
-            <?php foreach ($data['items'] as $t) : ?>
+            <?php foreach (($data['items'] ?? []) as $t) : ?>
                 <tr>
                     <td><?php echo (int)$t['id']; ?></td>
                     <td><?php echo htmlspecialchars((string)$t['client_name'], ENT_QUOTES, 'UTF-8'); ?></td>

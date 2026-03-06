@@ -31,7 +31,19 @@ final class TicketsController extends Controller
 
         $page = (int)($_GET['page'] ?? 1);
         $perPage = (int)($_GET['per_page'] ?? 50);
-        $data = Ticket::paginate($page, $perPage);
+        try {
+            $data = Ticket::paginate($page, $perPage);
+        } catch (\Throwable $e) {
+            $data = [];
+        }
+
+        if (!is_array($data)) {
+            $data = [];
+        }
+
+        if (!isset($data['items']) || !is_array($data['items'])) {
+            $data['items'] = [];
+        }
 
         return $this->view('tickets/index', [
             'data' => $data,
