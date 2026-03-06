@@ -9,11 +9,13 @@ final class AapanelApiClient
     private string $baseUrl;
     private string $apiKey;
     private HttpClient $http;
+    private bool $verifySsl;
 
-    public function __construct(string $baseUrl, string $apiKey, ?HttpClient $http = null)
+    public function __construct(string $baseUrl, string $apiKey, bool $verifySsl = true, ?HttpClient $http = null)
     {
         $this->baseUrl = rtrim($baseUrl, '/');
         $this->apiKey = $apiKey;
+        $this->verifySsl = $verifySsl;
         $this->http = $http ?? new HttpClient();
     }
 
@@ -25,7 +27,15 @@ final class AapanelApiClient
         $payload['request_time'] = time();
         $payload['request_token'] = md5($this->apiKey . $payload['request_time']);
 
-        [$status, $raw] = $this->http->postForm($url, $payload);
+        $curlOptions = [];
+        if (!$this->verifySsl && str_starts_with(strtolower($url), 'https://')) {
+            $curlOptions = [
+                CURLOPT_SSL_VERIFYPEER => false,
+                CURLOPT_SSL_VERIFYHOST => 0,
+            ];
+        }
+
+        [$status, $raw] = $this->http->postForm($url, $payload, [], 30, $curlOptions);
 
         $decoded = json_decode($raw, true);
         if (!is_array($decoded)) {

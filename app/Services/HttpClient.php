@@ -6,7 +6,7 @@ namespace App\Services;
 
 final class HttpClient
 {
-    public function postForm(string $url, array $data, array $headers = [], int $timeoutSeconds = 30): array
+    public function postForm(string $url, array $data, array $headers = [], int $timeoutSeconds = 30, array $curlOptions = []): array
     {
         $ch = curl_init($url);
         if ($ch === false) {
@@ -20,13 +20,19 @@ final class HttpClient
             $baseHeaders[] = $h;
         }
 
-        curl_setopt_array($ch, [
+        $opts = [
             CURLOPT_POST => true,
             CURLOPT_POSTFIELDS => http_build_query($data),
             CURLOPT_HTTPHEADER => $baseHeaders,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_TIMEOUT => $timeoutSeconds,
-        ]);
+        ];
+
+        foreach ($curlOptions as $k => $v) {
+            $opts[$k] = $v;
+        }
+
+        curl_setopt_array($ch, $opts);
 
         $raw = curl_exec($ch);
         if ($raw === false) {
@@ -41,7 +47,7 @@ final class HttpClient
         return [$status, (string)$raw];
     }
 
-    public function postJson(string $url, array $data, array $headers = [], int $timeoutSeconds = 30): array
+    public function postJson(string $url, array $data, array $headers = [], int $timeoutSeconds = 30, array $curlOptions = []): array
     {
         $ch = curl_init($url);
         if ($ch === false) {
@@ -60,13 +66,19 @@ final class HttpClient
             $baseHeaders[] = $h;
         }
 
-        curl_setopt_array($ch, [
+        $opts = [
             CURLOPT_POST => true,
             CURLOPT_POSTFIELDS => $json,
             CURLOPT_HTTPHEADER => $baseHeaders,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_TIMEOUT => $timeoutSeconds,
-        ]);
+        ];
+
+        foreach ($curlOptions as $k => $v) {
+            $opts[$k] = $v;
+        }
+
+        curl_setopt_array($ch, $opts);
 
         $raw = curl_exec($ch);
         if ($raw === false) {

@@ -48,6 +48,7 @@ final class SettingsController extends Controller
         $keys = [
             'aapanel_default_server_id',
             'aapanel_wwwroot_base',
+            'aapanel_insecure_ssl',
             'wp_base_path',
             'asaas_environment',
             'asaas_token_sandbox',

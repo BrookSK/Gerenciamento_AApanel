@@ -26,7 +26,11 @@ final class AapanelSiteService
             return null;
         }
 
-        return new AapanelApiClient((string)$server['base_url'], (string)$server['api_key']);
+        $settings = new SettingsService();
+        $insecure = (string)($settings->safeGet('aapanel_insecure_ssl') ?? '');
+        $verifySsl = $insecure !== '1';
+
+        return new AapanelApiClient((string)$server['base_url'], (string)$server['api_key'], $verifySsl);
     }
 
     public function listSites(): array

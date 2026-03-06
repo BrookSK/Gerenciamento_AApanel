@@ -28,7 +28,10 @@ final class AapanelMailService
             return $resp;
         }
 
-        $client = new AapanelApiClient((string)$server['base_url'], (string)$server['api_key']);
+        $settings = new SettingsService();
+        $insecure = (string)($settings->safeGet('aapanel_insecure_ssl') ?? '');
+        $verifySsl = $insecure !== '1';
+        $client = new AapanelApiClient((string)$server['base_url'], (string)$server['api_key'], $verifySsl);
 
         // Best-effort: endpoints podem variar conforme plugin Mail Server.
         $params = [
@@ -50,7 +53,10 @@ final class AapanelMailService
             return $resp;
         }
 
-        $client = new AapanelApiClient((string)$server['base_url'], (string)$server['api_key']);
+        $settings = new SettingsService();
+        $insecure = (string)($settings->safeGet('aapanel_insecure_ssl') ?? '');
+        $verifySsl = $insecure !== '1';
+        $client = new AapanelApiClient((string)$server['base_url'], (string)$server['api_key'], $verifySsl);
 
         $params = [
             'username' => $email,
@@ -70,7 +76,10 @@ final class AapanelMailService
             return $resp;
         }
 
-        $client = new AapanelApiClient((string)$server['base_url'], (string)$server['api_key']);
+        $settings = new SettingsService();
+        $insecure = (string)($settings->safeGet('aapanel_insecure_ssl') ?? '');
+        $verifySsl = $insecure !== '1';
+        $client = new AapanelApiClient((string)$server['base_url'], (string)$server['api_key'], $verifySsl);
 
         $params = [
             'username' => $email,

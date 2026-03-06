@@ -29,6 +29,13 @@
             <input type="text" name="aapanel_wwwroot_base" value="<?php echo htmlspecialchars((string)($settings['aapanel_wwwroot_base'] ?? '/www/wwwroot'), ENT_QUOTES, 'UTF-8'); ?>">
         </div>
 
+        <div>
+            <label>
+                <input type="checkbox" name="aapanel_insecure_ssl" value="1" <?php echo ((string)($settings['aapanel_insecure_ssl'] ?? '') === '1') ? 'checked' : ''; ?>>
+                Ignorar verificação SSL (certificado self-signed)
+            </label>
+        </div>
+
         <h2>WordPress</h2>
 
         <div>

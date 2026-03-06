@@ -50,7 +50,9 @@ final class ProvisioningService
             return;
         }
 
-        $client = new AapanelApiClient((string)$server['base_url'], (string)$server['api_key']);
+        $insecure = (string)($settings->safeGet('aapanel_insecure_ssl') ?? '');
+        $verifySsl = $insecure !== '1';
+        $client = new AapanelApiClient((string)$server['base_url'], (string)$server['api_key'], $verifySsl);
 
         $addSiteParams = [
             // NOTE: aaPanel geralmente usa webname em JSON no formato do BT.
@@ -151,7 +153,10 @@ final class ProvisioningService
             return;
         }
 
-        $client = new AapanelApiClient((string)$server['base_url'], (string)$server['api_key']);
+        $settings = new SettingsService();
+        $insecure = (string)($settings->safeGet('aapanel_insecure_ssl') ?? '');
+        $verifySsl = $insecure !== '1';
+        $client = new AapanelApiClient((string)$server['base_url'], (string)$server['api_key'], $verifySsl);
 
         $params = [];
         if ($aapanelResourceId !== '') {
@@ -173,7 +178,10 @@ final class ProvisioningService
             return;
         }
 
-        $client = new AapanelApiClient((string)$server['base_url'], (string)$server['api_key']);
+        $settings = new SettingsService();
+        $insecure = (string)($settings->safeGet('aapanel_insecure_ssl') ?? '');
+        $verifySsl = $insecure !== '1';
+        $client = new AapanelApiClient((string)$server['base_url'], (string)$server['api_key'], $verifySsl);
 
         $params = [];
         if ($aapanelResourceId !== '') {
