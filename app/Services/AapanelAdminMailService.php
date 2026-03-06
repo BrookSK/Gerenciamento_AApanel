@@ -9,6 +9,28 @@ use App\Models\IntegrationLog;
 
 final class AapanelAdminMailService
 {
+    private function extractList(array $resp): ?array
+    {
+        if (isset($resp['data']) && is_array($resp['data'])) {
+            if (isset($resp['data']['data']) && is_array($resp['data']['data'])) {
+                return $resp['data']['data'];
+            }
+            if (isset($resp['data']['list']) && is_array($resp['data']['list'])) {
+                return $resp['data']['list'];
+            }
+            if (isset($resp['data'][0])) {
+                return $resp['data'];
+            }
+        }
+        if (isset($resp['list']) && is_array($resp['list'])) {
+            return $resp['list'];
+        }
+        if (isset($resp['items']) && is_array($resp['items'])) {
+            return $resp['items'];
+        }
+        return null;
+    }
+
     private function getDefaultAapanelServer(): ?array
     {
         $settings = new SettingsService();
@@ -50,18 +72,27 @@ final class AapanelAdminMailService
             $resp = $client->request((string)$path, (array)$params);
             IntegrationLog::add('aapanel', 'mail.list', 'endpoint', (string)$path, 'ok', null, ['params' => $params], $resp);
 
-            if (isset($resp['data']) && is_array($resp['data'])) {
-                return ['items' => $resp['data'], 'raw' => $resp];
-            }
-            if (isset($resp['list']) && is_array($resp['list'])) {
-                return ['items' => $resp['list'], 'raw' => $resp];
-            }
-            if (isset($resp['items']) && is_array($resp['items'])) {
-                return ['items' => $resp['items'], 'raw' => $resp];
+            $list = $this->extractList($resp);
+            if (is_array($list)) {
+                return ['items' => $list, 'raw' => $resp];
             }
         }
 
-        return ['items' => [], 'raw' => $resp ?? []];
+        $err = null;
+        if (isset($resp['error']) && is_string($resp['error']) && trim($resp['error']) !== '') {
+            $err = trim($resp['error']);
+        }
+        if ($err === null && isset($resp['msg']) && is_string($resp['msg']) && trim($resp['msg']) !== '') {
+            $status = $resp['status'] ?? null;
+            if ($status === false || $status === 0 || $status === '0') {
+                $err = trim($resp['msg']);
+            }
+        }
+        if ($err === null && isset($resp['http_status']) && (int)$resp['http_status'] >= 400) {
+            $err = 'HTTP ' . (int)$resp['http_status'];
+        }
+
+        return ['items' => [], 'raw' => $resp ?? [], 'error' => $err];
     }
 
     public function createMailbox(string $email, string $password): array

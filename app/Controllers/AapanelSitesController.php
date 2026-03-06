@@ -89,6 +89,35 @@ final class AapanelSitesController extends Controller
         $svc = new AapanelSiteService();
         $resp = $svc->createSite($domain, $path !== '' ? $path : null, $phpVersion !== '' ? $phpVersion : null);
 
+        $ok = true;
+        if (isset($resp['http_status']) && (int)$resp['http_status'] >= 400) {
+            $ok = false;
+        }
+        if (isset($resp['status']) && ($resp['status'] === false || $resp['status'] === 0 || $resp['status'] === '0')) {
+            $ok = false;
+        }
+        if (isset($resp['error']) && is_string($resp['error']) && trim($resp['error']) !== '') {
+            $ok = false;
+        }
+
+        if (!$ok) {
+            $msg = null;
+            if (isset($resp['msg']) && is_string($resp['msg']) && trim($resp['msg']) !== '') {
+                $msg = trim($resp['msg']);
+            }
+            if ($msg === null && isset($resp['error']) && is_string($resp['error']) && trim($resp['error']) !== '') {
+                $msg = trim($resp['error']);
+            }
+            if ($msg === null) {
+                $msg = 'Falha ao criar site no aaPanel';
+            }
+
+            return $this->view('aapanel_sites/create', [
+                'error' => $msg,
+                'subscriptions' => Subscription::allForSelect(),
+            ]);
+        }
+
         if ($subscriptionId > 0) {
             $aapanelSiteId = null;
             if (isset($resp['siteId'])) {

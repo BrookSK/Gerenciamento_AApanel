@@ -9,6 +9,51 @@ use App\Models\IntegrationLog;
 
 final class AapanelSiteService
 {
+    private function extractList(array $resp): ?array
+    {
+        if (isset($resp['data']) && is_array($resp['data'])) {
+            if (isset($resp['data']['data']) && is_array($resp['data']['data'])) {
+                return $resp['data']['data'];
+            }
+            if (isset($resp['data']['list']) && is_array($resp['data']['list'])) {
+                return $resp['data']['list'];
+            }
+            if (isset($resp['data'][0])) {
+                return $resp['data'];
+            }
+        }
+        if (isset($resp['sites']) && is_array($resp['sites'])) {
+            return $resp['sites'];
+        }
+        if (isset($resp['list']) && is_array($resp['list'])) {
+            return $resp['list'];
+        }
+        if (isset($resp['items']) && is_array($resp['items'])) {
+            return $resp['items'];
+        }
+        return null;
+    }
+
+    private function responseError(array $resp): ?string
+    {
+        if (isset($resp['error']) && is_string($resp['error']) && trim($resp['error']) !== '') {
+            return trim($resp['error']);
+        }
+        if (isset($resp['msg']) && is_string($resp['msg']) && trim($resp['msg']) !== '') {
+            $status = $resp['status'] ?? null;
+            if ($status === false || $status === 0 || $status === '0') {
+                return trim($resp['msg']);
+            }
+        }
+        if (isset($resp['status']) && ($resp['status'] === false || $resp['status'] === 0 || $resp['status'] === '0')) {
+            return 'Request failed';
+        }
+        if (isset($resp['http_status']) && (int)$resp['http_status'] >= 400) {
+            return 'HTTP ' . (int)$resp['http_status'];
+        }
+        return null;
+    }
+
     private function getDefaultAapanelServer(): ?array
     {
         $settings = new SettingsService();
@@ -49,18 +94,14 @@ final class AapanelSiteService
             $resp = $client->request((string)$path, (array)$params);
             IntegrationLog::add('aapanel', 'site.list', 'endpoint', (string)$path, 'ok', null, ['params' => $params], $resp);
 
-            if (isset($resp['data']) && is_array($resp['data'])) {
-                return ['items' => $resp['data'], 'raw' => $resp];
-            }
-            if (isset($resp['sites']) && is_array($resp['sites'])) {
-                return ['items' => $resp['sites'], 'raw' => $resp];
-            }
-            if (isset($resp['list']) && is_array($resp['list'])) {
-                return ['items' => $resp['list'], 'raw' => $resp];
+            $list = $this->extractList($resp);
+            if (is_array($list)) {
+                return ['items' => $list, 'raw' => $resp];
             }
         }
 
-        return ['items' => [], 'raw' => $resp ?? []];
+        $err = is_array($resp ?? null) ? $this->responseError((array)$resp) : null;
+        return ['items' => [], 'raw' => $resp ?? [], 'error' => $err];
     }
 
     public function createSite(string $domain, ?string $path, ?string $phpVersion): array

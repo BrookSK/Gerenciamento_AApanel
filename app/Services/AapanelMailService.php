@@ -34,14 +34,27 @@ final class AapanelMailService
         $client = new AapanelApiClient((string)$server['base_url'], (string)$server['api_key'], $verifySsl);
 
         // Best-effort: endpoints podem variar conforme plugin Mail Server.
-        $params = [
-            'username' => $email,
-            'password' => $password,
+        $attempts = [
+            ['/mail?action=AddMailUser', ['username' => $email, 'password' => $password]],
+            ['/mail?action=AddUser', ['username' => $email, 'password' => $password]],
+            ['/mail?action=CreateMail', ['username' => $email, 'password' => $password]],
+            ['/mail?action=AddMailbox', ['email' => $email, 'password' => $password]],
         ];
 
-        $resp = $client->request('/mail?action=AddMailUser', $params);
-        IntegrationLog::add('aapanel', 'mail.create', 'mailbox', $email, 'ok', null, $params, $resp);
-        return $resp;
+        $last = ['error' => 'No response'];
+        foreach ($attempts as [$path, $params]) {
+            $last = $client->request((string)$path, (array)$params);
+            IntegrationLog::add('aapanel', 'mail.create', 'endpoint', (string)$path, 'ok', null, $params, $last);
+
+            $status = $last['status'] ?? null;
+            $http = (int)($last['http_status'] ?? 200);
+            if (($status === true || $status === 1 || $status === '1') && $http < 400) {
+                return $last;
+            }
+        }
+
+        IntegrationLog::add('aapanel', 'mail.create', 'mailbox', $email, 'error', 'All endpoints failed', ['email' => $email], $last);
+        return $last;
     }
 
     public function deleteMailbox(string $email): array
@@ -58,13 +71,27 @@ final class AapanelMailService
         $verifySsl = $insecure !== '1';
         $client = new AapanelApiClient((string)$server['base_url'], (string)$server['api_key'], $verifySsl);
 
-        $params = [
-            'username' => $email,
+        $attempts = [
+            ['/mail?action=DeleteMailUser', ['username' => $email]],
+            ['/mail?action=DeleteUser', ['username' => $email]],
+            ['/mail?action=DeleteMail', ['username' => $email]],
+            ['/mail?action=DeleteMailbox', ['email' => $email]],
         ];
 
-        $resp = $client->request('/mail?action=DeleteMailUser', $params);
-        IntegrationLog::add('aapanel', 'mail.delete', 'mailbox', $email, 'ok', null, $params, $resp);
-        return $resp;
+        $last = ['error' => 'No response'];
+        foreach ($attempts as [$path, $params]) {
+            $last = $client->request((string)$path, (array)$params);
+            IntegrationLog::add('aapanel', 'mail.delete', 'endpoint', (string)$path, 'ok', null, $params, $last);
+
+            $status = $last['status'] ?? null;
+            $http = (int)($last['http_status'] ?? 200);
+            if (($status === true || $status === 1 || $status === '1') && $http < 400) {
+                return $last;
+            }
+        }
+
+        IntegrationLog::add('aapanel', 'mail.delete', 'mailbox', $email, 'error', 'All endpoints failed', ['email' => $email], $last);
+        return $last;
     }
 
     public function changePassword(string $email, string $newPassword): array
@@ -81,13 +108,26 @@ final class AapanelMailService
         $verifySsl = $insecure !== '1';
         $client = new AapanelApiClient((string)$server['base_url'], (string)$server['api_key'], $verifySsl);
 
-        $params = [
-            'username' => $email,
-            'password' => $newPassword,
+        $attempts = [
+            ['/mail?action=SetMailUserPassword', ['username' => $email, 'password' => $newPassword]],
+            ['/mail?action=SetUserPassword', ['username' => $email, 'password' => $newPassword]],
+            ['/mail?action=ChangePassword', ['username' => $email, 'password' => $newPassword]],
+            ['/mail?action=SetMailboxPassword', ['email' => $email, 'password' => $newPassword]],
         ];
 
-        $resp = $client->request('/mail?action=SetMailUserPassword', $params);
-        IntegrationLog::add('aapanel', 'mail.password', 'mailbox', $email, 'ok', null, $params, $resp);
-        return $resp;
+        $last = ['error' => 'No response'];
+        foreach ($attempts as [$path, $params]) {
+            $last = $client->request((string)$path, (array)$params);
+            IntegrationLog::add('aapanel', 'mail.password', 'endpoint', (string)$path, 'ok', null, $params, $last);
+
+            $status = $last['status'] ?? null;
+            $http = (int)($last['http_status'] ?? 200);
+            if (($status === true || $status === 1 || $status === '1') && $http < 400) {
+                return $last;
+            }
+        }
+
+        IntegrationLog::add('aapanel', 'mail.password', 'mailbox', $email, 'error', 'All endpoints failed', ['email' => $email], $last);
+        return $last;
     }
 }
