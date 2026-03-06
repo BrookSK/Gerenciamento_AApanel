@@ -77,6 +77,11 @@
             <input type="text" name="asaas_webhook_url" value="<?php echo htmlspecialchars((string)($settings['asaas_webhook_url'] ?? ($baseUrl . '/webhooks/asaas')), ENT_QUOTES, 'UTF-8'); ?>">
         </div>
 
+        <div>
+            <label>Token de autenticação do Webhook (asaas-access-token)</label>
+            <input type="text" name="asaas_webhook_access_token" value="<?php echo htmlspecialchars((string)($settings['asaas_webhook_access_token'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>">
+        </div>
+
         <h2>Chamados</h2>
 
         <div>

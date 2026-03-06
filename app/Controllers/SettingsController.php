@@ -55,6 +55,7 @@ final class SettingsController extends Controller
             'asaas_billing_type',
             'asaas_payment_description',
             'asaas_webhook_url',
+            'asaas_webhook_access_token',
             'ticket_notify_emails',
         ];
 
