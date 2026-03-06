@@ -11,13 +11,5 @@
     <form method="post" action="/logout">
         <button type="submit">Sair</button>
     </form>
-
-    <div>
-        <a href="/clients">Clientes</a>
-        <a href="/subscriptions">Assinaturas</a>
-        <a href="/plans">Planos</a>
-        <a href="/tickets">Chamados</a>
-        <a href="/settings">Configurações</a>
-    </div>
 </body>
 </html>

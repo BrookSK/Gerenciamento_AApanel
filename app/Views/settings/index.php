@@ -8,11 +8,6 @@
 <body>
     <h1>Configurações</h1>
 
-    <div>
-        <a href="/">Painel</a>
-        <a href="/aapanel-servers">AAPanel Servers</a>
-    </div>
-
     <form method="post" action="/settings/save">
         <h2>AAPanel</h2>
 

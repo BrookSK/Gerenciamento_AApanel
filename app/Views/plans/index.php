@@ -9,7 +9,6 @@
     <h1>Planos</h1>
 
     <div>
-        <a href="/">Painel</a>
         <a href="/plans/create">Novo plano</a>
     </div>
 

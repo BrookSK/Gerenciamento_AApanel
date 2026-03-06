@@ -12,12 +12,6 @@
         <button type="submit">Sair</button>
     </form>
 
-    <div>
-        <a href="/portal/emails">Meus e-mails</a>
-        <a href="/portal/plans">Planos / Upgrade</a>
-        <a href="/portal/tickets">Chamados</a>
-    </div>
-
     <h2>Assinaturas</h2>
 
     <table border="1" cellpadding="6" cellspacing="0">

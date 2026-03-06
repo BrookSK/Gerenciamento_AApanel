@@ -8,11 +8,6 @@
 <body>
     <h1>Solicitações de Upgrade</h1>
 
-    <div>
-        <a href="/">Painel</a>
-        <a href="/plans">Planos</a>
-    </div>
-
     <table border="1" cellpadding="6" cellspacing="0">
         <thead>
             <tr>

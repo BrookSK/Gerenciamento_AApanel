@@ -9,8 +9,6 @@
     <h1>Assinaturas</h1>
 
     <div>
-        <a href="/">Painel</a>
-        <a href="/clients">Clientes</a>
         <a href="/subscriptions/create">Nova assinatura</a>
     </div>
 

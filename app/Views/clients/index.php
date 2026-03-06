@@ -9,9 +9,7 @@
     <h1>Clientes</h1>
 
     <div>
-        <a href="/">Painel</a>
         <a href="/clients/create">Novo cliente</a>
-        <a href="/subscriptions">Assinaturas</a>
     </div>
 
     <table border="1" cellpadding="6" cellspacing="0">

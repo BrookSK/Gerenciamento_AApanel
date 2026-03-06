@@ -8,10 +8,6 @@
 <body>
     <h1>Chamados</h1>
 
-    <div>
-        <a href="/">Painel</a>
-    </div>
-
     <table border="1" cellpadding="6" cellspacing="0">
         <thead>
             <tr>

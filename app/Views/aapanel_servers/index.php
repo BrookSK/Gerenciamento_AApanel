@@ -9,9 +9,6 @@
     <h1>AAPanel Servers</h1>
 
     <div>
-        <a href="/">Painel</a>
-        <a href="/clients">Clientes</a>
-        <a href="/subscriptions">Assinaturas</a>
         <a href="/aapanel-servers/create">Novo servidor</a>
     </div>
 

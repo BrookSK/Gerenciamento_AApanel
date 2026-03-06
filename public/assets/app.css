@@ -1,0 +1,210 @@
+:root{
+  --bg:#0b1020;
+  --panel:#0f172a;
+  --card:#111c33;
+  --text:#e5e7eb;
+  --muted:#9ca3af;
+  --border:rgba(255,255,255,.10);
+  --primary:#6366f1;
+  --primary-2:#818cf8;
+  --danger:#ef4444;
+  --shadow:0 10px 30px rgba(0,0,0,.35);
+  --radius:14px;
+  --radius-sm:10px;
+  --font:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,"Noto Sans","Liberation Sans",sans-serif;
+}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  font-family:var(--font);
+  color:var(--text);
+  background:radial-gradient(1200px 800px at 20% 0%, rgba(99,102,241,.25), transparent 55%),
+             radial-gradient(1200px 800px at 100% 10%, rgba(34,211,238,.10), transparent 50%),
+             var(--bg);
+  line-height:1.45;
+}
+
+a{color:var(--primary-2); text-decoration:none}
+a:hover{text-decoration:underline}
+
+h1,h2,h3{margin:0 0 12px 0; letter-spacing:-0.02em}
+h1{font-size:24px}
+h2{font-size:18px; color:#f3f4f6}
+
+/* App layout */
+.app-topbar{
+  position:sticky;
+  top:0;
+  z-index:20;
+  background:rgba(15,23,42,.72);
+  border-bottom:1px solid rgba(255,255,255,.10);
+  backdrop-filter: blur(10px);
+}
+.app-topbar-inner{
+  max-width:1100px;
+  margin:0 auto;
+  padding:12px 18px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+}
+.app-brand{font-weight:700; letter-spacing:-.02em; color:#f9fafb}
+.app-nav{display:flex; flex-wrap:wrap; gap:8px; justify-content:flex-end}
+.app-nav a{
+  display:inline-flex;
+  align-items:center;
+  padding:8px 10px;
+  border-radius:999px;
+  color:var(--text);
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.08);
+}
+.app-nav a:hover{background:rgba(255,255,255,.09); text-decoration:none}
+
+.app-main{padding:22px 0 40px}
+.app-container{max-width:1100px; margin:0 auto; padding:0 18px}
+
+.page-login .app-main{padding-top:46px}
+.page-login .app-container{
+  max-width:480px;
+}
+
+/* Layout (classless, funciona nas views atuais) */
+body > h1{
+  max-width:980px;
+  margin:28px auto 14px;
+  padding:0 18px;
+}
+body > h2,
+body > form,
+body > div,
+body > table,
+body > p{
+  max-width:980px;
+  margin-left:auto;
+  margin-right:auto;
+  padding-left:18px;
+  padding-right:18px;
+}
+
+/* Cards/containers frequentes */
+body > div{
+  background:rgba(17,28,51,.35);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  padding:14px;
+  margin-top:12px;
+}
+
+/* Spacing padrão quando o layout global estiver ativo */
+main[data-app-layout="1"] .app-container > h1{margin:0 0 14px 0}
+main[data-app-layout="1"] .app-container > h2{margin:16px 0 12px 0}
+main[data-app-layout="1"] .app-container > form{margin:12px 0}
+main[data-app-layout="1"] .app-container > table{margin:12px 0}
+main[data-app-layout="1"] .app-container > div{margin-top:12px}
+
+main[data-app-layout="1"] .app-container > div{
+  background:rgba(17,28,51,.35);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  padding:14px;
+}
+
+/* Navbar simples (listas de links em um div) */
+body > div a{
+  display:inline-block;
+  padding:8px 10px;
+  border-radius:10px;
+  color:var(--text);
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.06);
+  margin:4px 6px 4px 0;
+}
+body > div a:hover{
+  background:rgba(255,255,255,.07);
+  text-decoration:none;
+}
+
+/* Barra de ações (div com links/botões logo após o título) */
+main[data-app-layout="1"] .app-container > div:first-of-type{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  align-items:center;
+}
+
+main[data-app-layout="1"] .app-container > div:first-of-type a{
+  margin:0;
+}
+
+/* Forms */
+form{margin-top:12px}
+label{display:block; font-size:13px; color:var(--muted); margin:10px 0 6px}
+input,select,textarea{
+  width:100%;
+  max-width:520px;
+  padding:10px 12px;
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,.12);
+  background:rgba(15,23,42,.65);
+  color:var(--text);
+  outline:none;
+}
+input:focus,select:focus,textarea:focus{border-color:rgba(99,102,241,.7); box-shadow:0 0 0 4px rgba(99,102,241,.18)}
+
+button, input[type="submit"]{
+  appearance:none;
+  border:0;
+  color:white;
+  background:linear-gradient(135deg, var(--primary), var(--primary-2));
+  padding:10px 14px;
+  border-radius:12px;
+  cursor:pointer;
+  box-shadow:0 10px 20px rgba(99,102,241,.22);
+}
+button:hover, input[type="submit"]:hover{filter:brightness(1.05)}
+
+/* Tables */
+table{
+  width:100%;
+  border-collapse:separate;
+  border-spacing:0;
+  background:rgba(17,28,51,.35);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  overflow:hidden;
+  box-shadow:var(--shadow);
+  margin-top:12px;
+}
+th,td{padding:10px 12px; text-align:left; border-bottom:1px solid rgba(255,255,255,.07)}
+th{font-size:12px; text-transform:uppercase; letter-spacing:.08em; color:var(--muted); background:rgba(255,255,255,.03)}
+tr:last-child td{border-bottom:0}
+
+/* Alerts (compatível com erros atuais inline) */
+div[style*="color: #b00020"],
+div[style*="color:#b00020"],
+div[style*="#b00020"]{
+  background:rgba(239,68,68,.10) !important;
+  border:1px solid rgba(239,68,68,.35) !important;
+  color:#fecaca !important;
+  border-radius:12px;
+  padding:10px 12px;
+  max-width:980px;
+  margin:12px auto;
+}
+
+/* Ticket messages (views atuais usam inline border/padding; melhora sem quebrar) */
+div[style*="border:1px solid #ccc"]{
+  border:1px solid rgba(255,255,255,.10) !important;
+  background:rgba(15,23,42,.55) !important;
+  border-radius:var(--radius-sm) !important;
+}
+
+/* Pequenas melhorias */
+hr{border:0; border-top:1px solid rgba(255,255,255,.10); margin:16px 0}
+small{color:var(--muted)}

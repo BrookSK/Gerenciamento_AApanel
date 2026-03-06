@@ -9,11 +9,6 @@
     <h1>Logs de Integração</h1>
 
     <div>
-        <a href="/">Painel</a>
-        <a href="/settings">Configurações</a>
-    </div>
-
-    <div>
         Total: <?php echo (int)$data['total']; ?>
     </div>
 
