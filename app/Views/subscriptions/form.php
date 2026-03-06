@@ -12,6 +12,14 @@
         <a href="/subscriptions">Voltar</a>
         <?php if ($subscription) : ?>
             <a href="/provisioning/wordpress?subscription_id=<?php echo (int)$subscription['id']; ?>">Provisionar WordPress</a>
+            <form method="post" action="/subscriptions/resources/suspend" style="display:inline;">
+                <input type="hidden" name="id" value="<?php echo (int)$subscription['id']; ?>">
+                <button type="submit">Suspender recursos</button>
+            </form>
+            <form method="post" action="/subscriptions/resources/activate" style="display:inline;">
+                <input type="hidden" name="id" value="<?php echo (int)$subscription['id']; ?>">
+                <button type="submit">Reativar recursos</button>
+            </form>
         <?php endif; ?>
     </div>
 

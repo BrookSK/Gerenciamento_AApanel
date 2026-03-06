@@ -15,6 +15,13 @@ final class Subscription
         return $stmt->fetchAll();
     }
 
+    public static function allForSelect(): array
+    {
+        $db = Container::get('db')->pdo();
+        $stmt = $db->query('SELECT s.id, s.client_id, c.name AS client_name, s.title, s.plan_type, s.status FROM subscriptions s INNER JOIN clients c ON c.id = s.client_id ORDER BY s.id DESC');
+        return $stmt->fetchAll();
+    }
+
     public static function allByClientId(int $clientId): array
     {
         $db = Container::get('db')->pdo();

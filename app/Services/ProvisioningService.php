@@ -107,6 +107,65 @@ final class ProvisioningService
         SubscriptionItem::updateAapanelResource($itemId, $aapanelSiteId, $metadata);
     }
 
+    public function installWordpressOnLinkedSite(int $subscriptionId, string $domain): void
+    {
+        $subscription = Subscription::find($subscriptionId);
+        if ($subscription === null) {
+            return;
+        }
+
+        $domain = trim($domain);
+        if ($domain === '') {
+            return;
+        }
+
+        $item = SubscriptionItem::findBySubscriptionIdAndResource($subscriptionId, 'site', $domain);
+        if ($item === null) {
+            IntegrationLog::add('aapanel', 'wordpress.install_linked', 'subscription', (string)$subscriptionId, 'error', 'Linked site not found in subscription_items', ['domain' => $domain], null);
+            return;
+        }
+
+        $settings = new SettingsService();
+        $wwwrootBase = (string)($settings->safeGet('aapanel_wwwroot_base') ?? '/www/wwwroot');
+        $wpBasePath = (string)($settings->safeGet('wp_base_path') ?? '/desenvolvimento');
+
+        $siteRootPath = rtrim($wwwrootBase, '/') . '/' . $domain;
+        $wpInstallPath = rtrim($siteRootPath, '/') . '/' . ltrim($wpBasePath, '/');
+
+        $server = $this->getDefaultAapanelServer();
+        if ($server === null) {
+            IntegrationLog::add('aapanel', 'wordpress.install_linked', 'subscription', (string)$subscriptionId, 'error', 'No default server configured', ['domain' => $domain], null);
+            return;
+        }
+
+        $insecure = (string)($settings->safeGet('aapanel_insecure_ssl') ?? '');
+        $verifySsl = $insecure !== '1';
+        $client = new AapanelApiClient((string)$server['base_url'], (string)$server['api_key'], $verifySsl);
+
+        $params = [
+            'siteName' => $domain,
+            'path' => $wpInstallPath,
+        ];
+        $wpResp = $client->request('/site?action=InstallWordPress', $params);
+        IntegrationLog::add('aapanel', 'wordpress.install_linked', 'subscription', (string)$subscriptionId, 'ok', null, $params, $wpResp);
+
+        $metadata = [];
+        if (isset($item['metadata_json']) && is_string($item['metadata_json']) && trim($item['metadata_json']) !== '') {
+            $decoded = json_decode((string)$item['metadata_json'], true);
+            if (is_array($decoded)) {
+                $metadata = $decoded;
+            }
+        }
+
+        $metadata['requested_domain'] = $domain;
+        $metadata['site_root_path'] = $siteRootPath;
+        $metadata['wp_install_path'] = $wpInstallPath;
+        $metadata['provisioning'] = $metadata['provisioning'] ?? 'wordpress';
+        $metadata['aapanel_wp_install_response'] = $wpResp;
+
+        SubscriptionItem::updateAapanelResource((int)$item['id'], (string)($item['aapanel_resource_id'] ?? '') !== '' ? (string)$item['aapanel_resource_id'] : null, $metadata);
+    }
+
     public function suspendSubscription(int $subscriptionId): void
     {
         $subscription = Subscription::find($subscriptionId);

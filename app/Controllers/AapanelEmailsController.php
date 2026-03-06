@@ -7,6 +7,8 @@ namespace App\Controllers;
 use App\Core\Container;
 use App\Core\Controller;
 use App\Core\Response;
+use App\Models\Subscription;
+use App\Models\SubscriptionItem;
 use App\Services\AapanelAdminMailService;
 
 final class AapanelEmailsController extends Controller
@@ -33,6 +35,8 @@ final class AapanelEmailsController extends Controller
             'emails' => (array)($result['items'] ?? []),
             'raw' => $result['raw'] ?? null,
             'error' => $result['error'] ?? null,
+            'subscriptions' => Subscription::allForSelect(),
+            'linksByResourceName' => SubscriptionItem::linkedResourcesByType('email'),
         ]);
     }
 
@@ -99,6 +103,41 @@ final class AapanelEmailsController extends Controller
         $svc = new AapanelAdminMailService();
         $svc->changePassword($email, $password);
 
+        return $this->redirect('/aapanel-emails');
+    }
+
+    public function link(): Response
+    {
+        if ($r = $this->requireAuth()) {
+            return $r;
+        }
+
+        $subscriptionId = (int)($_POST['subscription_id'] ?? 0);
+        $email = trim((string)($_POST['email'] ?? ''));
+
+        if ($subscriptionId <= 0 || $email === '') {
+            return new Response(400, [], 'Bad Request');
+        }
+
+        SubscriptionItem::upsertLink($subscriptionId, 'email', $email, null, [
+            'linked_from' => 'aapanel_emails',
+        ]);
+
+        return $this->redirect('/aapanel-emails');
+    }
+
+    public function unlink(): Response
+    {
+        if ($r = $this->requireAuth()) {
+            return $r;
+        }
+
+        $email = trim((string)($_POST['email'] ?? ''));
+        if ($email === '') {
+            return new Response(400, [], 'Bad Request');
+        }
+
+        SubscriptionItem::unlinkByResource('email', $email);
         return $this->redirect('/aapanel-emails');
     }
 }

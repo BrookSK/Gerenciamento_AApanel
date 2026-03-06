@@ -57,4 +57,23 @@ final class ProvisioningController extends Controller
 
         return Response::redirect('/subscriptions/edit?id=' . $subscriptionId);
     }
+
+    public function wordpressInstallLinked(): Response
+    {
+        if ($r = $this->requireAuth()) {
+            return $r;
+        }
+
+        $subscriptionId = (int)($_POST['subscription_id'] ?? 0);
+        $domain = (string)($_POST['domain'] ?? '');
+
+        if ($subscriptionId <= 0 || trim($domain) === '') {
+            return new Response(400, [], 'Bad Request');
+        }
+
+        $svc = new ProvisioningService();
+        $svc->installWordpressOnLinkedSite($subscriptionId, $domain);
+
+        return Response::redirect('/subscriptions/edit?id=' . $subscriptionId);
+    }
 }

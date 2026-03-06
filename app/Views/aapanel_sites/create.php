@@ -20,6 +20,20 @@
 
     <form method="post" action="/aapanel-sites/store">
         <div>
+            <label>Assinatura (opcional)</label>
+            <select name="subscription_id">
+                <option value="">Sem vínculo</option>
+                <?php foreach (($subscriptions ?? []) as $sub) : ?>
+                    <option value="<?php echo (int)$sub['id']; ?>">
+                        <?php echo htmlspecialchars((string)$sub['client_name'], ENT_QUOTES, 'UTF-8'); ?>
+                        #<?php echo (int)$sub['id']; ?>
+                        - <?php echo htmlspecialchars((string)$sub['title'], ENT_QUOTES, 'UTF-8'); ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
+        </div>
+
+        <div>
             <label>Domínio</label>
             <input type="text" name="domain" required placeholder="ex: cliente.com.br">
         </div>
@@ -32,6 +46,13 @@
         <div>
             <label>Versão do PHP (opcional)</label>
             <input type="text" name="php_version" placeholder="ex: 74">
+        </div>
+
+        <div>
+            <label>
+                <input type="checkbox" name="install_wp" value="1">
+                Instalar WordPress (requer selecionar assinatura)
+            </label>
         </div>
 
         <button type="submit">Criar</button>

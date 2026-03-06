@@ -74,6 +74,8 @@ final class App
         $router->post('/subscriptions/store', ['App\\Controllers\\SubscriptionsController', 'store']);
         $router->get('/subscriptions/edit', ['App\\Controllers\\SubscriptionsController', 'edit']);
         $router->post('/subscriptions/update', ['App\\Controllers\\SubscriptionsController', 'update']);
+        $router->post('/subscriptions/resources/suspend', ['App\\Controllers\\SubscriptionsController', 'suspendResources']);
+        $router->post('/subscriptions/resources/activate', ['App\\Controllers\\SubscriptionsController', 'activateResources']);
         $router->post('/subscriptions/delete', ['App\\Controllers\\SubscriptionsController', 'delete']);
 
         $router->get('/aapanel-servers', ['App\\Controllers\\AapanelServersController', 'index']);
@@ -89,12 +91,16 @@ final class App
         $router->post('/aapanel-sites/start', ['App\\Controllers\\AapanelSitesController', 'start']);
         $router->post('/aapanel-sites/stop', ['App\\Controllers\\AapanelSitesController', 'stop']);
         $router->post('/aapanel-sites/delete', ['App\\Controllers\\AapanelSitesController', 'delete']);
+        $router->post('/aapanel-sites/link', ['App\\Controllers\\AapanelSitesController', 'link']);
+        $router->post('/aapanel-sites/unlink', ['App\\Controllers\\AapanelSitesController', 'unlink']);
 
         $router->get('/aapanel-emails', ['App\\Controllers\\AapanelEmailsController', 'index']);
         $router->get('/aapanel-emails/create', ['App\\Controllers\\AapanelEmailsController', 'create']);
         $router->post('/aapanel-emails/store', ['App\\Controllers\\AapanelEmailsController', 'store']);
         $router->post('/aapanel-emails/delete', ['App\\Controllers\\AapanelEmailsController', 'delete']);
         $router->post('/aapanel-emails/password', ['App\\Controllers\\AapanelEmailsController', 'changePassword']);
+        $router->post('/aapanel-emails/link', ['App\\Controllers\\AapanelEmailsController', 'link']);
+        $router->post('/aapanel-emails/unlink', ['App\\Controllers\\AapanelEmailsController', 'unlink']);
 
         $router->get('/settings', ['App\\Controllers\\SettingsController', 'index']);
         $router->post('/settings/save', ['App\\Controllers\\SettingsController', 'save']);
@@ -126,6 +132,7 @@ final class App
 
         $router->get('/provisioning/wordpress', ['App\\Controllers\\ProvisioningController', 'wordpressForm']);
         $router->post('/provisioning/wordpress', ['App\\Controllers\\ProvisioningController', 'wordpressProvision']);
+        $router->post('/provisioning/wordpress/install-linked', ['App\\Controllers\\ProvisioningController', 'wordpressInstallLinked']);
 
         $router->get('/integration-logs', ['App\\Controllers\\IntegrationLogsController', 'index']);
 

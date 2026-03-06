@@ -10,6 +10,7 @@ use App\Core\Response;
 use App\Models\Client;
 use App\Models\Plan;
 use App\Models\Subscription;
+use App\Services\ProvisioningService;
 
 final class SubscriptionsController extends Controller
 {
@@ -88,6 +89,40 @@ final class SubscriptionsController extends Controller
 
         Subscription::update($id, $_POST);
         return $this->redirect('/subscriptions');
+    }
+
+    public function suspendResources(): Response
+    {
+        if ($r = $this->requireAuth()) {
+            return $r;
+        }
+
+        $id = (int)($_POST['id'] ?? 0);
+        if ($id <= 0) {
+            return new Response(400, [], 'Bad Request');
+        }
+
+        $svc = new ProvisioningService();
+        $svc->suspendSubscription($id);
+
+        return $this->redirect('/subscriptions/edit?id=' . $id);
+    }
+
+    public function activateResources(): Response
+    {
+        if ($r = $this->requireAuth()) {
+            return $r;
+        }
+
+        $id = (int)($_POST['id'] ?? 0);
+        if ($id <= 0) {
+            return new Response(400, [], 'Bad Request');
+        }
+
+        $svc = new ProvisioningService();
+        $svc->activateSubscription($id);
+
+        return $this->redirect('/subscriptions/edit?id=' . $id);
     }
 
     public function delete(): Response
